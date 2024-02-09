@@ -2,20 +2,20 @@ import type { IScale } from '@univerjs/core';
 import type { SpreadsheetSkeleton, UniverRenderingContext } from '@univerjs/engine-render';
 import { DEFAULT_FONTFACE_PLANE, FIX_ONE_PIXEL_BLUR_OFFSET, getColor, MIDDLE_CELL_POS_MAGIC_NUMBER, SheetExtension } from '@univerjs/engine-render';
 
-const UNIQUE_KEY = 'RowHeaderCustomExtension';
+const UNIQUE_KEY = 'MainCustomExtension';
 
 // Show custom emojis on row headers
 const customEmojiList = ['🍎', '🍌', '🍒', '🍓', '🍅', '🍆', '🍇', '🍈', '🍉', '🍊'];
 
-export class RowHeaderCustomExtension extends SheetExtension {
+export class MainCustomExtension extends SheetExtension {
     override uKey = UNIQUE_KEY;
 
-    // Must be greater than 10
-    override zIndex = 11;
+    // Must be greater than 50
+    override zIndex = 50;
 
     override draw(ctx: UniverRenderingContext, parentScale: IScale, spreadsheetSkeleton: SpreadsheetSkeleton) {
-        const { rowColumnSegment, rowHeaderWidth = 0 } = spreadsheetSkeleton;
-        const { startRow, endRow } = rowColumnSegment;
+        const { rowColumnSegment } = spreadsheetSkeleton;
+        const { startRow, endRow, startColumn, endColumn } = rowColumnSegment;
         if (!spreadsheetSkeleton) {
             return;
         }
@@ -55,8 +55,26 @@ export class RowHeaderCustomExtension extends SheetExtension {
                 continue;
             }
 
-            const middleCellPos = preRowPosition + (rowEndPosition - preRowPosition) / 2;
-            customEmojiList[r] && ctx.fillText(customEmojiList[r], rowHeaderWidth / 2 + 14, middleCellPos + MIDDLE_CELL_POS_MAGIC_NUMBER); // Magic number 1, because the vertical alignment appears to be off by 1 pixel.
+            let preColumnPosition = 0;
+            const columnWidthAccumulationLength = columnWidthAccumulation.length;
+            for (let c = startColumn - 1; c <= endColumn; c++) {
+                if (c < 0 || c > columnWidthAccumulationLength - 1) {
+                    continue;
+                }
+
+                const columnEndPosition = columnWidthAccumulation[c];
+                if (preColumnPosition === columnEndPosition) {
+                // Skip hidden columns
+                    continue;
+                }
+
+                // painting cell text
+                const middleCellPosX = preColumnPosition + (columnEndPosition - preColumnPosition) / 2;
+                const middleCellPosY = preRowPosition + (rowEndPosition - preRowPosition) / 2;
+                customEmojiList[c] && ctx.fillText(customEmojiList[c], middleCellPosX + 20, middleCellPosY + MIDDLE_CELL_POS_MAGIC_NUMBER); // Magic number 1, because the vertical alignment appears to be off by 1 pixel
+                preColumnPosition = columnEndPosition;
+            }
+
             preRowPosition = rowEndPosition;
         }
         ctx.stroke();

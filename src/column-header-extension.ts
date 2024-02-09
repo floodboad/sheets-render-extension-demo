@@ -1,7 +1,6 @@
-
 import type { IScale } from '@univerjs/core';
 import type { SpreadsheetSkeleton, UniverRenderingContext } from '@univerjs/engine-render';
-import { DEFAULT_FONTFACE_PLANE, FIX_ONE_PIXEL_BLUR_OFFSET, getColor, SheetColumnHeaderExtensionRegistry, SheetExtension } from '@univerjs/engine-render';
+import { DEFAULT_FONTFACE_PLANE, FIX_ONE_PIXEL_BLUR_OFFSET, getColor, SheetExtension } from '@univerjs/engine-render';
 
 const UNIQUE_KEY = 'ColumnHeaderCustomExtension';
 
@@ -33,9 +32,6 @@ export class ColumnHeaderCustomExtension extends SheetExtension {
         ) {
             return;
         }
-
-        const scale = this._getScale(parentScale);
-
         // painting background
         ctx.fillStyle = getColor([248, 249, 250]);
 
@@ -58,13 +54,9 @@ export class ColumnHeaderCustomExtension extends SheetExtension {
 
             const columnEndPosition = columnWidthAccumulation[c];
             if (preColumnPosition === columnEndPosition) {
-                // Skip hidden rows
+                // Skip hidden columns
                 continue;
             }
-
-            // painting line border
-            ctx.moveTo(columnEndPosition, 0);
-            ctx.lineTo(columnEndPosition, columnHeaderHeight);
 
             // painting column header text
             const middleCellPos = preColumnPosition + (columnEndPosition - preColumnPosition) / 2;
@@ -72,12 +64,6 @@ export class ColumnHeaderCustomExtension extends SheetExtension {
             preColumnPosition = columnEndPosition;
         }
 
-        // painting line bottom border
-        const columnHeaderHeightFix = columnHeaderHeight - 0.5 / scale;
-        ctx.moveTo(0, columnHeaderHeightFix);
-        ctx.lineTo(columnTotalWidth, columnHeaderHeightFix);
         ctx.stroke();
     }
 }
-
-SheetColumnHeaderExtensionRegistry.add(new ColumnHeaderCustomExtension());
