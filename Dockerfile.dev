@@ -1,0 +1,22 @@
+# Base Image
+
+#FROM node18:v1.0
+FROM node:18-alpine3.14
+WORKDIR /app
+
+# Run yarn only if package.json changes
+COPY package.json .
+
+#RUN npm config set registry https://registry.npmmirror.com
+#RUN yarn global dir && yarn global bin
+#RUN yarn add -D vite
+#RUN yarn vite --version
+#RUN yarn install --production=false
+#RUN npm i
+#RUN npm install pnpm -g
+#RUN pnpm config set registry https://registry.npmmirror.com
+RUN apk add --no-cache bash curl
+
+#COPY . .
+EXPOSE 3000 5173
+CMD ["pnpm", "-v" ]

@@ -1,0 +1,33 @@
+# docker-compose.yml or compose.yml both names are OK
+# However more pref is now given to compose.yml file
+# version field is now DEPRECATED & not required
+
+services:
+    sheetext:
+        image: sheetext:v1.1
+#        image: docker_username/frontend-dev:latest
+        build:
+          context: .
+          dockerfile: Dockerfile.dev
+        container_name: sheetext
+        working_dir: /app
+        ports:
+            - '4001:3000'
+            - '4002:5173'
+        volumes:
+            - .:/app
+            - ./node_modules:/app/node_modules
+#            - /mnt/d/zhz/projects/idea/sheets-render-extension-demo:/app
+#            - /mnt/d/zhz/projects/idea/sheets-render-extension-demo/package.json:/app/package.json
+#            - /mnt/d/zhz/projects/idea/sheets-render-extension-demo/node_modules:/app/node_modules
+#        command: yarn install --production=false
+        command: >
+            /bin/sh -c "
+                npm install pnpm -g &&
+                pnpm config set registry https://registry.npmmirror.com  &&
+                pnpm config set ignore-workspace-root-check true  &&
+                pnpm add vite -D && 
+                pnpm install &&
+                pnpm  run dev 
+            "
+
