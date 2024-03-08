@@ -16,7 +16,7 @@ import { UniverSheetsFormulaPlugin } from "@univerjs/sheets-formula";
 import { UniverSheetsNumfmtPlugin } from "@univerjs/sheets-numfmt";
 import { UniverSheetsUIPlugin } from "@univerjs/sheets-ui";
 import { UniverUIPlugin } from "@univerjs/ui";
-import { FUniver } from '@univerjs/facade';
+// import { FUniver } from '@univerjs/facade';
 
 // import { RowHeaderCustomExtension } from './row-header-extension';
 // import { ColumnHeaderCustomExtension } from './column-header-extension';
@@ -53,7 +53,7 @@ const unitId = 'workbook'
 // create univer sheet instance
 univer.createUniverSheet({id:unitId});
 
-const univerAPI = FUniver.newAPI(univer);
+// const univerAPI = FUniver.newAPI(univer);
 // univerAPI.registerSheetRowHeaderExtension(unitId, new RowHeaderCustomExtension());
 // univerAPI.registerSheetColumnHeaderExtension(unitId, new ColumnHeaderCustomExtension());
 // univerAPI.registerSheetMainExtension(unitId, new MainCustomExtension());
