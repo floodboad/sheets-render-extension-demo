@@ -11,7 +11,9 @@ export class RowHeaderCustomExtension extends SheetExtension {
     override uKey = UNIQUE_KEY;
 
     // Must be greater than 10
-    override zIndex = 11;
+    override get zIndex() {
+        return 11;
+    }
 
     override draw(ctx: UniverRenderingContext, parentScale: IScale, spreadsheetSkeleton: SpreadsheetSkeleton) {
         const { rowColumnSegment, rowHeaderWidth = 0 } = spreadsheetSkeleton;

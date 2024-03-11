@@ -11,7 +11,9 @@ export class MainCustomExtension extends SheetExtension {
     override uKey = UNIQUE_KEY;
 
     // Must be greater than 50
-    override zIndex = 50;
+    override get zIndex() {
+        return 50;
+    }
 
     override draw(ctx: UniverRenderingContext, parentScale: IScale, spreadsheetSkeleton: SpreadsheetSkeleton) {
         const { rowColumnSegment } = spreadsheetSkeleton;
